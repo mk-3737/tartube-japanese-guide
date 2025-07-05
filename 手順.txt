@@ -1,0 +1,97 @@
+※免責事項は README.md をご確認のうえ、内容に同意された方のみご使用ください。
+※翻訳には Google翻訳 を使用しています。自然な翻訳や高い精度を求める方は使用をご遠慮ください。
+※このリポジトリには AI 生成コードを含みます。
+※このプロジェクトに含まれる flag_ja_JP.png の画像は、当方がペイントで雑に作成したものです。中心がずれていたり色が異なるため、神経質な方は使用をご遠慮ください。
+
+===========================================================================================
+
+Tartubeバージョン: 2.5.100
+翻訳方法: Google翻訳
+※Windows 11での実行を前提に手順コメントを記載しています。
+
+同じバージョンであれば、すでに変換済みの tartube.po と tartube.mo が ja/LC_MESSAGES/ 内に存在するため、手順8から開始してください。
+
+【前提条件】
+- Python の最新版をインストールし、環境設定を済ませておく
+- 以下のコマンドで polib をインストール
+  pip install polib
+
+※PowerShell はすべてこのフォルダ内で実行してください。
+  フォルダ内で Shift を押しながら右クリックし、「PowerShell ウィンドウをここで開く」を選択。
+  または、PowerShell 上でパスを直接指定しても構いません。
+
+【手順】
+
+手順1  
+以下から Tartube の公式 Git リポジトリを開き、最新の messages.pot をダウンロード：  
+https://github.com/axcore/tartube/blob/master/tartube/po/messages.pot
+
+手順2  
+ダウンロードした messages.pot をこのフォルダに入れ、change.py を使って変換。  
+PowerShell にて以下を実行：  
+python .\change.py extract .\messages.pot .\tartube.txt
+
+手順3  
+生成された tartube.txt の内容をすべてコピーし、Translation HTML.html ファイルの <pre></pre> 内に貼り付け。  
+ブラウザで開いて、ブラウザ標準の翻訳機能で全体を翻訳します。  
+※ページ全体が翻訳されていることを確認してから、翻訳結果をすべてコピーしてください。
+
+手順4  
+元の tartube.txt の内容を削除し、日本語化したテキストで上書きします（すべて貼り付け）。
+
+手順5  
+change.py を使用して .po に変換。PowerShell で以下を実行：  
+python .\change.py apply .\messages.pot .\tartube.txt .\tartube.po
+
+手順6  
+make_mo.py を使用して .mo に変換。PowerShell で以下を実行：  
+python make_mo.py
+
+手順7  
+生成された tartube.po および tartube.mo を、このフォルダ内の ja/LC_MESSAGES/ にドラッグ＆ドロップして上書きします。
+
+手順8  
+以下のパスをエクスプローラー等で開き、ユーザー名 を自分の環境に合わせて修正し、ja フォルダを貼り付けます。  
+C:\Users\ユーザー名\AppData\Local\Tartube\msys64\home\user\tartube\locale
+
+手順9  
+flag_ja_JP.png を以下のパスにコピーします：  
+C:\Users\ユーザー名\AppData\Local\Tartube\msys64\home\user\tartube\icons\locale
+
+手順10  
+※Tartubeのコードを書き換えるため、mainwin.py のバックアップを事前に必ず取得してください。
+
+以下のフォルダを開き、mainwin.py を検索し、Visual Studio Code などで開きます：  
+C:\Users\ユーザー名\AppData\Local\Tartube\msys64\home\user\tartube
+
+ファイル内で "locale" を検索し、以下のような記述を探します：
+
+elif main_win_obj.app_obj.current_locale == 'vi':
+    image.set_from_pixbuf(
+        main_win_obj.pixbuf_dict['yt_remind_icon_vi'],
+    )
+
+このすぐ下に以下のコードを追加：
+
+elif main_win_obj.app_obj.current_locale == 'ja':
+    image.set_from_pixbuf(
+        main_win_obj.pixbuf_dict['yt_remind_icon_ja'],
+    )
+
+保存して閉じます。
+
+手順11  
+※同様に formats.py を変更するため、バックアップの取得を強く推奨します。  
+フォルダ内で formats.py を検索し、Visual Studio Code などで開きます。
+
+ファイル内で "locale_setup_list" を検索し、以下の行を追加します：
+
+'ja_JP',    '日本語',
+
+保存して閉じます。
+
+手順12  
+Tartube を起動した際に警告が表示される場合がありますが、「とにかく起動」の方を選択してください。
+
+これで日本語化は完了です。  
+Tartube の設定画面から言語を「日本語」に変更できるようになります。
